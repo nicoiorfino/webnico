@@ -1,0 +1,7 @@
+services:
+  webnico:
+    build: .
+    container_name: webnico
+    ports:
+      - "7000:80"
+    restart: unless-stopped
