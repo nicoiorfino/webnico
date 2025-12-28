@@ -238,4 +238,66 @@ footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid rgba(
 }
 
 
+/* Suggested calendar CSS (from user) - note: these selectors apply to an in-page calendar
+   like FullCalendar or another DOM calendar. They cannot style cross-origin Google
+   Calendar iframe contents. Keep here in case you replace the iframe with an in-page calendar. */
+
+/* Contenedor principal del calendario */
+#calendar {
+  background-color: #121212; /* Fondo oscuro igual a tus cards */
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #333333;
+  font-family: sans-serif;
+}
+
+/* Encabezados de los días (Lun, Mar, etc) */
+.fc-col-header-cell {
+  background-color: #1a1a1a;
+  color: #00ffff !important; /* Color cian de tus títulos */
+  text-transform: uppercase;
+  font-size: 0.9em;
+  padding: 10px 0 !important;
+}
+
+/* Bordes de las celdas */
+.fc td, .fc th {
+  border-color: #333333 !important;
+}
+
+/* Color de los números de los días */
+.fc-daygrid-day-number {
+  color: #aaaaaa;
+  padding: 5px !important;
+}
+
+/* Resaltado del día actual */
+.fc-day-today {
+  background-color: rgba(0, 255, 255, 0.05) !important; /* Un toque leve de cian */
+}
+
+/* Estilo de los Eventos (Las guardias) */
+.fc-event {
+  background-color: #00ffff !important; /* Fondo cian */
+  border: none !important;
+  color: #000000 !important; /* Texto negro para contraste */
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+/* Botones de navegación (Hoy, <, >) */
+.fc-button-primary {
+  background-color: #1a1a1a !important;
+  border-color: #00ffff !important;
+  color: #00ffff !important;
+}
+
+.fc-button-primary:hover {
+  background-color: #00ffff !important;
+  color: #000000 !important;
+}
+
+
 
