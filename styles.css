@@ -110,6 +110,9 @@ header {
 .icon-large{font-size:2rem;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02)}
 
 .emoji-style{font-size:20px}
+/* modern emoji SVG container styling */
+.emoji-svg svg{display:block;width:100%;height:100%;border-radius:8px}
+.emoji-svg text{filter:drop-shadow(0 6px 10px rgba(0,0,0,0.45))}
 
 .card-title{font-size:1rem;font-weight:600}
 
