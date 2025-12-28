@@ -229,7 +229,7 @@ footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid rgba(
 
 /* Calendar embed inside dropdown */
 .calendar-embed-wrap{width:100%;max-width:1000px;margin:8px auto;background:linear-gradient(180deg, rgba(1,6,8,0.55), rgba(6,8,10,0.6));padding:10px;border-radius:10px;border:1px solid rgba(0,255,255,0.06);box-shadow:0 18px 60px rgba(0,255,255,0.04), inset 0 6px 18px rgba(0,0,0,0.25);overflow:hidden}
-.calendar-embed-wrap iframe{width:100%;height:760px;border-radius:8px;display:block;border:0;transform:scale(1.02);transform-origin:top center;box-shadow:0 8px 34px rgba(0,0,0,0.6);-webkit-filter:invert(1) hue-rotate(180deg) contrast(1.06) brightness(1.02) saturate(0.98);filter:invert(1) hue-rotate(180deg) contrast(1.06) brightness(1.02) saturate(0.98)}
+.calendar-embed-wrap iframe{width:100%;height:760px;border-radius:8px;display:block;border:0;transform:scale(1.02);transform-origin:top center;box-shadow:0 8px 34px rgba(0,0,0,0.6);-webkit-filter:contrast(1.08) brightness(1.04) saturate(1.06);filter:contrast(1.08) brightness(1.04) saturate(1.06)}
 
 /* For small screens make calendar slightly shorter but still larger than default */
 @media (max-width:768px){
