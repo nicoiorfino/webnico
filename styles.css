@@ -227,3 +227,13 @@ footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid rgba(
 
 @media (max-width:480px){.title{font-size:1.4rem}.grid{grid-template-columns:repeat(2,1fr)}.icon{width:36px;height:36px}.icon-large{width:48px;height:48px}}
 
+/* Calendar embed inside dropdown */
+.calendar-embed-wrap{width:100%;max-width:940px;margin:6px auto;background:transparent;padding:6px;border-radius:8px}
+.calendar-embed-wrap iframe{width:100%;height:520px;border-radius:6px;display:block;border:0;-webkit-filter:invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95);filter:invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95)}
+
+/* actions for calendar (open in full Google Calendar) */
+.calendar-actions{display:flex;justify-content:flex-end;padding-top:8px}
+.calendar-actions .btn{background:linear-gradient(90deg,var(--accent),#9ff9f9);color:#02121a;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:700;border:1px solid rgba(0,0,0,0.08);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
+.calendar-actions .btn:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,0.45)}
+
+
