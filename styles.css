@@ -69,54 +69,144 @@ header {
 }
 
 .section-title {
-  font-size: 1.05rem;
-  color: #00ffff;
-  margin-bottom: 14px;
+  font-size: 1.06rem;
+  margin-bottom: 36px; /* more breathing room to avoid hover overlap */
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight:700;
+  letter-spacing: 1.8px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--accent), #9ff9f9 60%, var(--neon));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 8px 40px rgba(0,255,255,0.06);
 }
 
 /* Dropdown */
 .dropdown-toggle {
   width: 100%;
-  background: linear-gradient(90deg, rgba(0,255,255,0.06), rgba(255,0,255,0.03));
-  color: #001018;
-  border: 1px solid rgba(0,255,255,0.08);
-  padding: 12px 16px;
-  font-size: 1.05rem;
-  font-weight:700;
-  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(0,255,255,0.06), rgba(0,0,0,0.00));
+  color: #e9ffff;
+  border: 1px solid rgba(0,255,255,0.10);
+  padding: 14px 18px;
+  font-size: 1.06rem;
+  font-weight: 800;
+  border-radius: 8px; /* more squared with rounded corners */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  box-shadow: 0 12px 36px rgba(0,255,255,0.045), inset 0 -3px 10px rgba(255,255,255,0.02);
+  transition: transform .14s cubic-bezier(.2,.9,.3,1), box-shadow .14s ease, border-color .14s ease;
 }
 
-.dropdown-toggle:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,255,255,0.06), 0 6px 14px rgba(255,0,255,0.02);border-color:rgba(0,255,255,0.18)}
+.dropdown-toggle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 60px rgba(0,255,255,0.08), 0 8px 26px rgba(0,0,0,0.6);
+  border-color: rgba(0,255,255,0.22);
+}
 
-.dropdown-toggle .arrow{transition:transform .18s ease}
+.dropdown-toggle .arrow { transition: transform .18s ease }
 
-.dropdown-toggle.active .arrow{transform:rotate(180deg)}
+.dropdown-toggle.active .arrow { transform: rotate(180deg) }
 
-.dropdown-content{max-height:0;overflow:hidden;transition:max-height .28s ease;margin-top:10px}
-.dropdown-content.active{max-height:800px}
+/* brighter, more readable dropdown surface */
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .32s cubic-bezier(.2,.9,.3,1), opacity .22s ease, padding .22s ease;
+  margin-top: 0;
+  padding: 0; /* remove padding when closed so nothing shows */
+  background: linear-gradient(180deg, rgba(6,8,10,0.96), rgba(12,14,16,0.96));
+  border-radius: 10px;
+  border: 1px solid rgba(0,255,255,0.04);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.65), inset 0 6px 18px rgba(255,255,255,0.01);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none; /* prevent clicking when closed */
+}
 
-.link-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:inherit;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.02);margin-bottom:10px;transition:transform .14s ease,box-shadow .14s ease}
-.link-item:hover{transform:translateX(8px);background:linear-gradient(90deg, rgba(0,255,255,0.06), rgba(255,0,255,0.02));box-shadow:0 8px 20px rgba(0,255,255,0.04), 0 2px 6px rgba(255,0,255,0.02);border-color:rgba(0,255,255,0.12);color:#001018}
-.link-item:last-child{margin-bottom:0}
+.dropdown-content.active {
+  max-height: 900px;
+  margin-top: 12px;
+  padding: 12px;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
 
-/* Grid de apps */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.link-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px 14px 36px; /* reserve space for decorative bar */
+  border-radius:12px; /* a bit more square */
+  text-decoration:none;
+  color:var(--muted);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(6,8,10,0.48));
+  border:1px solid rgba(0,255,255,0.10);
+  margin-bottom:12px;
+  transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease, background .18s ease;
+  width:100%;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.6) inset;
+  z-index:1; /* ensure pseudo-element sits behind text */
+}
 
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(0,255,255,0.03);border-radius:12px;padding:18px 14px;text-align:center;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .16s ease,box-shadow .16s ease}
-.card:hover{transform:translateY(-8px);box-shadow:0 28px 80px rgba(0,255,255,0.06), 0 12px 30px rgba(255,0,255,0.02)}
+.link-item:hover{
+  transform: translateY(-6px) translateZ(6px);
+  /* hover surface: white text, normal weight for readability */
+  background: linear-gradient(180deg, rgba(0,255,255,0.10), rgba(0,255,255,0.04));
+  box-shadow: 0 28px 100px rgba(0,255,255,0.12), 0 10px 30px rgba(0,0,0,0.6);
+  border-color: rgba(0,255,255,0.22);
+  color: #ffffff; /* white text on hover */
+  font-weight: 400; /* normal weight */
+  text-shadow: none;
+}
 
-.icon{font-size:1.2rem;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,rgba(0,255,255,0.03),rgba(255,0,255,0.01));border:1px solid rgba(0,255,255,0.06);box-shadow:0 8px 18px rgba(0,255,255,0.03), inset 0 -6px 10px rgba(0,0,0,0.5)}
-.icon > *{line-height:1}
-.icon-large{font-size:2rem;display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,rgba(0,255,255,0.04),rgba(255,0,255,0.02));border:1px solid rgba(0,255,255,0.06);box-shadow:0 12px 30px rgba(0,255,255,0.04), inset 0 -8px 14px rgba(0,0,0,0.55)}
+.link-item:last-child { margin-bottom: 0 }
+
+/* add strong 3D bevel/highlight on buttons inside dropdowns */
+.link-item::before{
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 44px;
+  width: 8px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.02));
+  box-shadow: 0 6px 18px rgba(0,255,255,0.06) inset;
+  opacity: .95;
+  z-index:0; /* place behind content */
+  pointer-events:none; /* don't intercept hover */
+}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:34px;perspective:1200px}
+
+/* 3D retro-illuminated card concept - defined/shaped */
+
+.card{position:relative;z-index:1;transform-style:preserve-3d;background:linear-gradient(180deg, rgba(12,14,16,0.96), rgba(8,10,12,0.9));border:1px solid rgba(0,255,255,0.08);border-radius:10px;padding:22px 18px;text-align:center;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:14px;transition:transform .28s cubic-bezier(.2,.9,.3,1),box-shadow .24s ease}
+
+.card::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,0,0,0.02));transform:translateZ(-10px) scale(.99);filter:blur(14px);z-index:-2;opacity:.9}
+.card::after{content:'';position:absolute;left:6%;right:6%;bottom:-28px;height:38px;border-radius:50%;background:radial-gradient(ellipse at center, rgba(0,0,0,0.7), rgba(0,0,0,0.18) 60%, transparent);filter:blur(22px);z-index:-3;opacity:0.98}
+
+.card:hover{transform:translateY(-14px) rotateX(6deg) scale(1.015);box-shadow:0 48px 140px rgba(0,255,255,0.12),0 20px 60px rgba(0,0,0,0.7);border-color:rgba(0,255,255,0.22);z-index:60}
+.card .card-title{color:#e6fff9;text-shadow:0 12px 48px rgba(0,255,255,0.10)}
+
+/* make cards look more defined / shaped */
+.card .shape-surface{width:72px;height:56px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));box-shadow:inset 0 8px 18px rgba(255,255,255,0.02), 0 12px 30px rgba(0,0,0,0.6)}
+
+/* hide glyph icons (we keep structure for semantics) */
+.icon,.icon-large{display:none !important;visibility:hidden}
+
+/* optional decorative block where the icon was (keeps spacing) */
+.card .icon-placeholder{width:64px;height:64px;border-radius:12px;display:block;transform:translateZ(12px);box-shadow:0 12px 34px rgba(0,0,0,0.6) inset;}
+
+/* stronger neon/retro title glow */
+.title{text-shadow:0 8px 28px rgba(0,255,255,0.12),0 0 48px rgba(0,255,255,0.06),0 0 96px rgba(255,0,255,0.03)}
+.section-title{color:var(--accent);text-shadow:0 8px 40px rgba(0,255,255,0.06)}
 
 .emoji-style{font-size:20px}
 /* modern emoji SVG container styling */
