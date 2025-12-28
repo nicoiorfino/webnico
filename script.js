@@ -1,15 +1,33 @@
 function toggleDropdown(id) {
-  const dropdown = document.getElementById(id)
-  const allDropdowns = document.querySelectorAll(".dropdown-content")
-  const allToggles = document.querySelectorAll(".dropdown-toggle")
+  const target = document.getElementById(id)
+  if (!target) return
 
-  const icons = {/* preserved earlier small set not needed for modern emojis */}
+  // Close other dropdowns
+  const allDropdowns = Array.from(document.querySelectorAll('.dropdown-content'))
+  allDropdowns.forEach(d => {
+    if (d === target) d.classList.toggle('active')
+    else d.classList.remove('active')
+  })
 
-  // Generate a modern SVG badge for an emoji character (AI-styled)
+  // Update toggle buttons' active state (match onclick attribute)
+  const allToggles = Array.from(document.querySelectorAll('.dropdown-toggle'))
+  allToggles.forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || ''
+    if (onclick.includes(`'${id}'`) || onclick.includes(`\"${id}\"`)) {
+      btn.classList.toggle('active', target.classList.contains('active'))
+    } else {
+      btn.classList.remove('active')
+    }
+  })
+}
+
+// -------------------- Modern emoji rendering (separate scope) --------------------
+;(function(){
+  // Generate a modern SVG badge for an emoji character
   function createModernEmojiSVG(emoji, size){
     const id = 'g'+Math.random().toString(36).slice(2,9)
-    const grad1 = '#0ff'
-    const grad2 = '#00aaff'
+    const grad1 = '#00ffff'
+    const grad2 = '#00cccc'
     const shadow = 'rgba(0,0,0,0.45)'
     const s = size
     const fontSize = Math.floor(s*0.55)
@@ -45,3 +63,4 @@ function toggleDropdown(id) {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderModernEmojis)
   else renderModernEmojis()
+})();
