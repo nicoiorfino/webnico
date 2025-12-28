@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+:root{
+  --bg:#0f1724;
+  --accent:#00ffff; /* v0 cyan */
+  --neon:#ff00ff;
+  --muted:#94a3b8;
+}
+
 body {
   font-family: 'Inter', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #000000;
@@ -39,6 +46,8 @@ header {
   letter-spacing: 1px;
 }
 
+.title{ text-shadow:0 2px 8px rgba(0,255,255,0.12), 0 0 28px rgba(0,255,255,0.06), 0 0 60px rgba(255,0,255,0.03); }
+
 .subtitle {
   font-size: 1rem;
   color: #cccccc;
@@ -52,11 +61,11 @@ header {
 }
 
 .section {
-  background-color: #0f1112;
+  background-color: rgba(15,17,18,0.9);
   border-radius: 12px;
   padding: 18px;
-  border: 1px solid rgba(0,255,255,0.05);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  border: 1px solid rgba(0,255,255,0.04);
+  box-shadow: 0 6px 30px rgba(0,0,0,0.7), inset 0 -6px 18px rgba(0,0,0,0.45);
 }
 
 .section-title {
@@ -72,21 +81,21 @@ header {
 /* Dropdown */
 .dropdown-toggle {
   width: 100%;
-  background: linear-gradient(90deg, rgba(0,255,255,0.08), rgba(0,255,255,0.04));
-  color: #000000;
-  border: none;
+  background: linear-gradient(90deg, rgba(0,255,255,0.06), rgba(255,0,255,0.03));
+  color: #001018;
+  border: 1px solid rgba(0,255,255,0.08);
   padding: 12px 16px;
   font-size: 1.05rem;
   font-weight:700;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform .14s ease, box-shadow .14s ease;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
 
-.dropdown-toggle:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,255,255,0.04)}
+.dropdown-toggle:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,255,255,0.06), 0 6px 14px rgba(255,0,255,0.02);border-color:rgba(0,255,255,0.18)}
 
 .dropdown-toggle .arrow{transition:transform .18s ease}
 
@@ -95,24 +104,28 @@ header {
 .dropdown-content{max-height:0;overflow:hidden;transition:max-height .28s ease;margin-top:10px}
 .dropdown-content.active{max-height:800px}
 
-.link-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;text-decoration:none;color:inherit;background:transparent;border:1px solid rgba(255,255,255,0.02);margin-bottom:8px;transition:all .18s ease}
-.link-item:hover{transform:translateX(6px);background:rgba(0,255,255,0.06);border-color:rgba(0,255,255,0.08);color:#e6eef6}
+.link-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:inherit;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.02);margin-bottom:10px;transition:transform .14s ease,box-shadow .14s ease}
+.link-item:hover{transform:translateX(8px);background:linear-gradient(90deg, rgba(0,255,255,0.06), rgba(255,0,255,0.02));box-shadow:0 8px 20px rgba(0,255,255,0.04), 0 2px 6px rgba(255,0,255,0.02);border-color:rgba(0,255,255,0.12);color:#001018}
 .link-item:last-child{margin-bottom:0}
 
 /* Grid de apps */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 
-.card{background-color:#141414;border:1px solid rgba(255,255,255,0.03);border-radius:10px;padding:18px 14px;text-align:center;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .16s ease,box-shadow .16s ease}
-.card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.7)}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(0,255,255,0.03);border-radius:12px;padding:18px 14px;text-align:center;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .16s ease,box-shadow .16s ease}
+.card:hover{transform:translateY(-8px);box-shadow:0 28px 80px rgba(0,255,255,0.06), 0 12px 30px rgba(255,0,255,0.02)}
 
-.icon{font-size:1.2rem;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02);box-shadow:inset 0 -6px 10px rgba(0,0,0,0.6)}
+.icon{font-size:1.2rem;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,rgba(0,255,255,0.03),rgba(255,0,255,0.01));border:1px solid rgba(0,255,255,0.06);box-shadow:0 8px 18px rgba(0,255,255,0.03), inset 0 -6px 10px rgba(0,0,0,0.5)}
 .icon > *{line-height:1}
-.icon-large{font-size:2rem;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02)}
+.icon-large{font-size:2rem;display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,rgba(0,255,255,0.04),rgba(255,0,255,0.02));border:1px solid rgba(0,255,255,0.06);box-shadow:0 12px 30px rgba(0,255,255,0.04), inset 0 -8px 14px rgba(0,0,0,0.55)}
 
 .emoji-style{font-size:20px}
 /* modern emoji SVG container styling */
 .emoji-svg svg{display:block;width:100%;height:100%;border-radius:8px}
 .emoji-svg text{filter:drop-shadow(0 6px 10px rgba(0,0,0,0.45))}
+
+/* subtle animated accent line */
+.accent-animate{background:linear-gradient(90deg, transparent, rgba(0,255,255,0.12), rgba(255,0,255,0.06), transparent);background-size:200% 100%;animation:accent-slide 6s linear infinite}
+@keyframes accent-slide{0%{background-position:0% 0%}50%{background-position:100% 0%}100%{background-position:0% 0%}}
 
 .card-title{font-size:1rem;font-weight:600}
 
