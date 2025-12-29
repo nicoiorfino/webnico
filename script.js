@@ -65,58 +65,74 @@ function toggleDropdown(id) {
   else renderModernEmojis()
 })();
 
-// 1. GESTIÓN DE DROPDOWNS (Tu lógica original)
+// 1. GESTIÓN DE DROPDOWNS (Tu lógica original unificada)
 function toggleDropdown(id) {
   const target = document.getElementById(id);
   if (!target) return;
-
   const allDropdowns = Array.from(document.querySelectorAll('.dropdown-content'));
   allDropdowns.forEach(d => {
     if (d === target) d.classList.toggle('active');
     else d.classList.remove('active');
   });
-
-  const allToggles = Array.from(document.querySelectorAll('.dropdown-toggle'));
-  allToggles.forEach(btn => {
-    const onclick = btn.getAttribute('onclick') || '';
-    if (onclick.includes(`'${id}'`) || onclick.includes(`"${id}"`)) {
-      btn.classList.toggle('active', target.classList.contains('active'));
-    } else {
-      btn.classList.remove('active');
-    }
-  });
 }
 
-// 2. LÓGICA DE CONECTIVIDAD (Adaptada de lo que pasaste en main.js)
-// Esta función se ejecuta sola al cargar la página
+// 2. LÓGICA DE CONECTIVIDAD AVANZADA (Detecta 502, 404, etc.)
 document.addEventListener("DOMContentLoaded", () => {
-  // Buscamos todas las tarjetas que ya tenés escritas en el HTML
+  // Buscamos todas las tarjetas en tu HTML
   const cards = document.querySelectorAll('.card');
-
   cards.forEach(card => {
     const url = card.getAttribute('href');
     if (url && url !== "#") {
-      checkConnectivity(url, card);
+      checkInternalConnectivity(url, card);
     }
   });
 });
 
-async function checkConnectivity(url, cardElement) {
+async function checkInternalConnectivity(url, cardElement) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 2000); // 2 segundos de espera
+  const timeout = setTimeout(() => controller.abort(), 3000); // 3 segundos para redes internas
 
   try {
-    await fetch(url, {
+    // INTENTO 1: Petición estándar para leer response.ok (detecta 502, 404, 500)
+    const response = await fetch(url, {
       method: "HEAD",
-      mode: "no-cors", 
       signal: controller.signal,
-      cache: "no-store",
+      cache: "no-store"
     });
+
     clearTimeout(timeout);
-    updateStatusIndicator(cardElement, true); // Si responde, verde
+
+    // Si response.ok es false (400-599), el sitio está caído o con error
+    if (!response.ok) {
+      console.warn(`Error detectado en ${url}: Status ${response.status}`);
+      updateStatusIndicator(cardElement, false);
+      return;
+    }
+
+    // Si llegó aquí, es un 200 OK
+    updateStatusIndicator(cardElement, true);
+
   } catch (e) {
     clearTimeout(timeout);
-    updateStatusIndicator(cardElement, false); // Si falla o hay timeout, rojo
+
+    // Si el error es TypeError, es probable que sea un bloqueo de CORS del navegador
+    if (e.name === 'TypeError') {
+      // INTENTO 2: Modo no-cors (Ping ciego)
+      // No podemos ver si es 502, pero verificamos si la IP/Servidor responde
+      try {
+        await fetch(url, {
+          method: "HEAD",
+          mode: "no-cors",
+          signal: controller.signal
+        });
+        updateStatusIndicator(cardElement, true); // El servidor respondió algo
+      } catch (innerError) {
+        updateStatusIndicator(cardElement, false); // Ni siquiera responde la IP
+      }
+    } else {
+      // Error de Red real o Timeout (Servidor apagado o saturado)
+      updateStatusIndicator(cardElement, false);
+    }
   }
 }
 
@@ -128,6 +144,6 @@ function updateStatusIndicator(card, isUp) {
     dot.style.boxShadow = isUp ? "0 0 10px #00ff00" : "0 0 10px #ff0000";
   }
   if (!isUp) {
-    card.style.opacity = "0.7"; // Opcional: opaca un poco la tarjeta si está caído
+    card.style.opacity = "0.6";
   }
 }
