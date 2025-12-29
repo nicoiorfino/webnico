@@ -287,17 +287,14 @@ footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid rgba(
   padding: 2px 5px;
 }
 
-/* Botones de navegación (Hoy, <, >) */
-.fc-button-primary {
-  background-color: #1a1a1a !important;
-  border-color: #00ffff !important;
-  color: #00ffff !important;
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: 5px;
+    background-color: #555; /* Gris por defecto */
+    transition: background-color 0.5s ease;
 }
-
-.fc-button-primary:hover {
-  background-color: #00ffff !important;
-  color: #000000 !important;
-}
-
 
 

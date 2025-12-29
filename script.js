@@ -64,3 +64,35 @@ function toggleDropdown(id) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderModernEmojis)
   else renderModernEmojis()
 })();
+
+async function checkHealth() {
+    const sites = document.querySelectorAll('.card[data-url]');
+
+    sites.forEach(async (site) => {
+        const url = site.getAttribute('data-url');
+        const dot = site.querySelector('.status-dot');
+        
+        // Ponemos el punto en naranja mientras piensa
+        dot.style.backgroundColor = "orange";
+
+        try {
+            // Intentamos una petición rápida
+            // mode: 'no-cors' permite saltear bloqueos de seguridad básicos
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos max
+
+            await fetch(url, { mode: 'no-cors', signal: controller.signal });
+            
+            // Si llega aquí, el servidor respondió (Verde)
+            dot.style.backgroundColor = "#00ff88";
+            dot.style.boxShadow = "0 0 8px #00ff88";
+        } catch (err) {
+            // Si hay error (502, timeout, caido), se pone Rojo
+            dot.style.backgroundColor = "#ff3333";
+            dot.style.boxShadow = "0 0 8px #ff3333";
+        }
+    });
+}
+
+// Ejecutar al cargar
+window.addEventListener('load', checkHealth);
