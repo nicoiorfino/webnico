@@ -65,34 +65,69 @@ function toggleDropdown(id) {
   else renderModernEmojis()
 })();
 
-async function checkHealth() {
-    const sites = document.querySelectorAll('.card[data-url]');
+// 1. GESTIÓN DE DROPDOWNS (Tu lógica original)
+function toggleDropdown(id) {
+  const target = document.getElementById(id);
+  if (!target) return;
 
-    sites.forEach(async (site) => {
-        const url = site.getAttribute('data-url');
-        const dot = site.querySelector('.status-dot');
-        
-        // Ponemos el punto en naranja mientras piensa
-        dot.style.backgroundColor = "orange";
+  const allDropdowns = Array.from(document.querySelectorAll('.dropdown-content'));
+  allDropdowns.forEach(d => {
+    if (d === target) d.classList.toggle('active');
+    else d.classList.remove('active');
+  });
 
-        try {
-            // Intentamos una petición rápida
-            // mode: 'no-cors' permite saltear bloqueos de seguridad básicos
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos max
-
-            await fetch(url, { mode: 'no-cors', signal: controller.signal });
-            
-            // Si llega aquí, el servidor respondió (Verde)
-            dot.style.backgroundColor = "#00ff88";
-            dot.style.boxShadow = "0 0 8px #00ff88";
-        } catch (err) {
-            // Si hay error (502, timeout, caido), se pone Rojo
-            dot.style.backgroundColor = "#ff3333";
-            dot.style.boxShadow = "0 0 8px #ff3333";
-        }
-    });
+  const allToggles = Array.from(document.querySelectorAll('.dropdown-toggle'));
+  allToggles.forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || '';
+    if (onclick.includes(`'${id}'`) || onclick.includes(`"${id}"`)) {
+      btn.classList.toggle('active', target.classList.contains('active'));
+    } else {
+      btn.classList.remove('active');
+    }
+  });
 }
 
-// Ejecutar al cargar
-window.addEventListener('load', checkHealth);
+// 2. LÓGICA DE CONECTIVIDAD (Adaptada de lo que pasaste en main.js)
+// Esta función se ejecuta sola al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  // Buscamos todas las tarjetas que ya tenés escritas en el HTML
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+    const url = card.getAttribute('href');
+    if (url && url !== "#") {
+      checkConnectivity(url, card);
+    }
+  });
+});
+
+async function checkConnectivity(url, cardElement) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 2000); // 2 segundos de espera
+
+  try {
+    await fetch(url, {
+      method: "HEAD",
+      mode: "no-cors", 
+      signal: controller.signal,
+      cache: "no-store",
+    });
+    clearTimeout(timeout);
+    updateStatusIndicator(cardElement, true); // Si responde, verde
+  } catch (e) {
+    clearTimeout(timeout);
+    updateStatusIndicator(cardElement, false); // Si falla o hay timeout, rojo
+  }
+}
+
+function updateStatusIndicator(card, isUp) {
+  const dot = card.querySelector('.status-dot');
+  if (dot) {
+    dot.classList.remove('checking');
+    dot.style.backgroundColor = isUp ? "#00ff00" : "#ff0000";
+    dot.style.boxShadow = isUp ? "0 0 10px #00ff00" : "0 0 10px #ff0000";
+  }
+  if (!isUp) {
+    card.style.opacity = "0.7"; // Opcional: opaca un poco la tarjeta si está caído
+  }
+}
