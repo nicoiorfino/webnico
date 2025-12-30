@@ -102,15 +102,16 @@ async function checkInternalConnectivity(url, cardElement) {
 
     clearTimeout(timeout);
 
-    // Si response.ok es false (400-599), el sitio está caído o con error
-    if (!response.ok) {
-      console.warn(`Error detectado en ${url}: Status ${response.status}`);
-      updateStatusIndicator(cardElement, false);
+    // EXCEPCIÓN PARA JIRA (405): Si es 200 OK o 405 Method Not Allowed, el sitio está vivo.
+    // Pero si es 502 (como Zabbix), response.ok es false y el status NO es 405, por lo que va a rojo.
+    if (response.ok || response.status === 405) {
+      updateStatusIndicator(cardElement, true);
       return;
-    }
+    } 
 
-    // Si llegó aquí, es un 200 OK
-    updateStatusIndicator(cardElement, true);
+    // Si llegó aquí es un error real (502, 504, 500, 404)
+    console.warn(`Error detectado en ${url}: Status ${response.status}`);
+    updateStatusIndicator(cardElement, false);
 
   } catch (e) {
     clearTimeout(timeout);
@@ -143,7 +144,5 @@ function updateStatusIndicator(card, isUp) {
     dot.style.backgroundColor = isUp ? "#00ff00" : "#ff0000";
     dot.style.boxShadow = isUp ? "0 0 10px #00ff00" : "0 0 10px #ff0000";
   }
-  if (!isUp) {
-    card.style.opacity = "0.6";
-  }
+  card.style.opacity = isUp ? "1" : "0.6";
 }
