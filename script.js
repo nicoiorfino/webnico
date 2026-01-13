@@ -65,7 +65,7 @@ function toggleDropdown(id) {
   else renderModernEmojis()
 })();
 
-// 1. GESTIÓN DE DROPDOWNS (Tu lógica original unificada)
+// 1. GESTIÓN DE DROPDOWNS
 function toggleDropdown(id) {
   const target = document.getElementById(id);
   if (!target) return;
@@ -76,9 +76,8 @@ function toggleDropdown(id) {
   });
 }
 
-// 2. LÓGICA DE CONECTIVIDAD AVANZADA (Detecta 502, 404, etc.)
-document.addEventListener("DOMContentLoaded", () => {
-  // Buscamos todas las tarjetas en tu HTML
+// 2. MONITORIZACIÓN Y REFRESH AUTOMÁTICO (3 MINUTOS)
+function startMonitoring() {
   const cards = document.querySelectorAll('.card');
   cards.forEach(card => {
     const url = card.getAttribute('href');
@@ -86,52 +85,70 @@ document.addEventListener("DOMContentLoaded", () => {
       checkInternalConnectivity(url, card);
     }
   });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  startMonitoring();
+  setInterval(startMonitoring, 180000); 
 });
 
 async function checkInternalConnectivity(url, cardElement) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 3000); // 3 segundos para redes internas
+  const timeout = setTimeout(() => controller.abort(), 4000);
 
   try {
-    // INTENTO 1: Petición estándar para leer response.ok (detecta 502, 404, 500)
+    // Usamos GET para poder leer el cuerpo si es necesario
     const response = await fetch(url, {
-      method: "HEAD",
+      method: "GET",
       signal: controller.signal,
       cache: "no-store"
     });
 
     clearTimeout(timeout);
 
-    // EXCEPCIÓN PARA JIRA (405): Si es 200 OK o 405 Method Not Allowed, el sitio está vivo.
-    // Pero si es 502 (como Zabbix), response.ok es false y el status NO es 405, por lo que va a rojo.
-    if (response.ok || response.status === 405) {
+    // Caso Jira: Status 405 es señal de vida
+    if (response.status === 405) {
       updateStatusIndicator(cardElement, true);
       return;
-    } 
+    }
 
-    // Si llegó aquí es un error real (502, 504, 500, 404)
-    console.warn(`Error detectado en ${url}: Status ${response.status}`);
-    updateStatusIndicator(cardElement, false);
+    // Caso Zabbix: Detecta el 502 real
+    if (!response.ok) {
+      updateStatusIndicator(cardElement, false);
+      return;
+    }
+
+    // CASO WIKI: Validación de contenido dinámica
+    if (url.includes('wiki.danaide.com.ar')) {
+        try {
+            const htmlText = await response.text();
+            // Si el texto contiene el error, va a rojo. Si no, va a VERDE.
+            if (htmlText.includes("Fatal exception") || htmlText.includes("RuntimeException")) {
+                updateStatusIndicator(cardElement, false);
+            } else {
+                updateStatusIndicator(cardElement, true);
+            }
+        } catch (e) {
+            // Si no podemos leer el texto por CORS, al menos sabemos que el status fue 200
+            updateStatusIndicator(cardElement, true);
+        }
+    } else {
+        // Resto de los sitios (Status 200 = Verde)
+        updateStatusIndicator(cardElement, true);
+    }
 
   } catch (e) {
     clearTimeout(timeout);
-
-    // Si el error es TypeError, es probable que sea un bloqueo de CORS del navegador
+    
+    // Rescate para sitios con bloqueo estricto (Jira/Atlassian)
     if (e.name === 'TypeError') {
-      // INTENTO 2: Modo no-cors (Ping ciego)
-      // No podemos ver si es 502, pero verificamos si la IP/Servidor responde
       try {
-        await fetch(url, {
-          method: "HEAD",
-          mode: "no-cors",
-          signal: controller.signal
-        });
-        updateStatusIndicator(cardElement, true); // El servidor respondió algo
-      } catch (innerError) {
-        updateStatusIndicator(cardElement, false); // Ni siquiera responde la IP
+        await fetch(url, { method: "GET", mode: "no-cors", signal: controller.signal });
+        updateStatusIndicator(cardElement, true);
+      } catch {
+        updateStatusIndicator(cardElement, false);
       }
     } else {
-      // Error de Red real o Timeout (Servidor apagado o saturado)
       updateStatusIndicator(cardElement, false);
     }
   }
